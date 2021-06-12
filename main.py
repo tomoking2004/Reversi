@@ -15,7 +15,7 @@ def app():
     random = Random_Agent(env)
     ab = AlphaBeta_Agent(env)
     #dqn = DQN_Agent(env)
-    #dqn.load()
+    #dqn.load("models/ddqn_model500.h5")
 
     # 機能拡張
     env.gui = gui

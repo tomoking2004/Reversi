@@ -84,11 +84,10 @@ class DQN_Agent:
         self.mainQN = Q_Network(INPUT_SHAPE, HIDDEN_SIZE, OUTPUT_SIZE, LR)
         self.targetQN = Q_Network(INPUT_SHAPE, HIDDEN_SIZE, OUTPUT_SIZE, LR)
         self.memory = Memory(MEMORY_SIZE)
-        self.path = DQN_PATH['model']
 
-    def info(self):
+    def info(self, path):
         self.mainQN.model.summary()
-        plot_model(self.mainQN.model, to_file=DQN_PATH['network'], show_shapes=True)
+        plot_model(self.mainQN.model, to_file=path, show_shapes=True)
 
     def remember(self, experience):
         self.memory.push(experience)
@@ -115,16 +114,16 @@ class DQN_Agent:
 
         return action
 
-    def load(self):
+    def load(self, path):
         try:
-            self.mainQN.model = load_model(self.path)
+            self.mainQN.model = load_model(path)
             print('Loaded DQN model.')
         except:
             print('Failed loading DQN model.')
 
-    def save(self):
+    def save(self, path):
         try:
-            self.mainQN.model.save(self.path)
+            self.mainQN.model.save(path)
             print('Saved DQN model.')
         except:
             print('Failed saving DQN model.')
@@ -133,44 +132,44 @@ class DQN_Agent:
 def train():
     # クラス生成
     env = SimpleReversi()
-    agent_a = DQN_Agent(env)
-    agent_b = Random_Agent(env)
+    dqn = DQN_Agent(env)
+    trainer = Random_Agent(env)
 
     # モデルのロード
     if LOAD_MODEL:
-        agent_a.load()
+        dqn.load(DQN_PATH['model'])
 
     # メインルーチン
     total_reward = np.array([])
     total_mean = np.array([])
     islearned = 0
 
-    agent_a.info()
+    dqn.info(DQN_PATH['network'])
 
     for episode in range(NUM_EPISODES):
 
         state = env.reset()  # 環境初期化
-        agent_a.update_target()
+        dqn.update_target()
         episode_reward = 0
 
         for t in range(0, MAX_STEPS):
 
             if env.color==1:  # DQN_Agent
                 epsilon = 0.001 + 0.9 / (1.0+episode)
-                action = agent_a.get_action(epsilon)
+                action = dqn.get_action(epsilon)
             else:  # Other_Agent
-                action = agent_b.get_action()
+                action = trainer.get_action()
 
             next_state, reward, done, _ = env.step(action)
-            agent_a.remember((state, action, reward, next_state))
+            dqn.remember((state, action, reward, next_state))
             state = next_state
             episode_reward += reward
 
             if not islearned:
-                agent_a.learn()
+                dqn.learn()
 
             if DQN_MODE:
-                agent_a.update_target()
+                dqn.update_target()
 
             if done:
                 env.write_data(DQN_PATH['data'])
@@ -188,11 +187,11 @@ def train():
 
         # モデルの定期セーブ
         if SAVE_MODEL and episode%SAVE_CYCLE==0 and episode!=0:
-            agent_a.save()
+            dqn.save(DQN_PATH['model'])
 
     # モデルのセーブ
     if SAVE_MODEL:
-        agent_a.save()
+        dqn.save(DQN_PATH['model'])
 
     # 結果のプロット
     plt.plot(np.arange(NUM_EPISODES), total_mean)
