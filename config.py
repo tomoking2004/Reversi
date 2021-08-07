@@ -47,27 +47,18 @@ BOARD_EVALUATION = [[120,-40, 20,  5,  5, 20,-40,120],
 HEIGHT = 5  #探索木の高さ
 
 #----------dqn----------
-# Q_Network
+# params
 INPUT_SHAPE = (5, BOARD_SIZE, BOARD_SIZE)  # 入力形状(状態の形状)
-HIDDEN_SIZE = 128  # 隠れ層のニューロンの数
-OUTPUT_SIZE = 64  # 出力サイズ(行動のサイズ)
+OUTPUT_SIZE = 4  # 出力サイズ(行動のサイズ)
 LR = 0.001  # 学習係数
-GAMMA = 0.90  # 割引係数
-DQN_PATH = {'model':'models/ddqn_model500.h5',
-            'network':'models/Q-network500.png',
-            'data':'data/train500.csv',
-            'result':'models/result500.png'}  # DQNのパス
-
-# Memory
+GAMMA = 0.95  # 割引係数
 MEMORY_SIZE = 10000  # メモリサイズ
-BATCH_SIZE = 32  # バッチサイズ
-
-# Trainer
+BATCH_SIZE = 500  # バッチサイズ
+# train
+DQN_MODEL_NAME = 'dqn'  # DQNモデルの名前
 DQN_MODE = 0  # DQNモード(0:DDQN, 1:DQN)
-LOAD_MODEL = True  # モデルのロード
-SAVE_MODEL = True  # モデルのセーブ
-SAVE_CYCLE = 20  # 定期セーブ周期
-NUM_EPISODES = 500  # エピソード数
-MAX_STEPS = 100  # 最大ステップ数
-GOAL_AVG_REWARD = 1  # 目標平均報酬
+SAVE_CYCLE = 100  # 定期セーブ周期
+NUM_EPISODES = 1000  # エピソード数
+MAX_STEPS = 500  # 最大ステップ数
+GOAL_AVG_REWARD = 100  # 目標平均報酬
 AVG_SIZE = 10  # 平均する集合の大きさ
