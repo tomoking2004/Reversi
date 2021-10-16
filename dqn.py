@@ -26,14 +26,14 @@ class DQN_Agent:
     def build_model(self):  # ネットワーク構築
         model = Sequential()
         # when loading model, faild with InputLayer.
-        model.add(Conv2D(128, 3, padding='same', activation='relu', input_shape=self.input_shape))
+        model.add(Conv2D(128, 3, padding='same', activation='relu', input_shape=INPUT_SHAPE))
         model.add(BatchNormalization())
         model.add(Conv2D(128, 3, padding='same', activation='relu'))
         model.add(BatchNormalization())
         model.add(Conv2D(128, 3, padding='same', activation='relu'))
         model.add(BatchNormalization())
         model.add(Flatten())
-        model.add(Dense(128, activation='relu', input_shape=INPUT_SHAPE))
+        model.add(Dense(128, activation='relu'))
         model.add(Dense(128, activation='relu'))
         model.add(Dense(128, activation='relu'))
         model.add(Dense(OUTPUT_SIZE, activation='softmax'))

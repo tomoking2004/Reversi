@@ -49,7 +49,7 @@ HEIGHT = 5  #探索木の高さ
 #----------dqn----------
 # params
 INPUT_SHAPE = (5, BOARD_SIZE, BOARD_SIZE)  # 入力形状(状態の形状)
-OUTPUT_SIZE = 4  # 出力サイズ(行動のサイズ)
+OUTPUT_SIZE = 64  # 出力サイズ(行動のサイズ)
 LR = 0.001  # 学習係数
 GAMMA = 0.95  # 割引係数
 MEMORY_SIZE = 10000  # メモリサイズ
